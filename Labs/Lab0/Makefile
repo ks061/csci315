@@ -8,13 +8,13 @@ OBJS = dnode.o dlist.o
 all: $(EXECS)
 
 dnode.o: dnode.c dnode.h 
-	${CC} ${CFLAGS} ${INCLUDES} -c denode.c
+	${CC} ${CFLAGS} -c $< -o $@
 
-dlist.o: dlist.h dlist.c dnode.h
-	${CC} ${CFLAGS} ${INCLUDES} -c dlist.c
+dlist.o: dlist.c dlist.h dnode.h
+	${CC} ${CFLAGS} -c $< -o $@
 
-dlisttest: ${OBJS}
-	${CC} ${CLFAGS} ${OBJS} -o $@
+dlisttest: dlisttest.c ${OBJS}
+	${CC} ${CFLAGS} $< ${OBJS} -o $@
 
 clean:
 	/bin/rm -rf $(EXECS) ${OBJS}
