@@ -1,0 +1,7 @@
+(1.b) There are two instances of num: one in the memory space
+      of the child and one in that of the parent. Upon testing by
+      changing num in a pid==0 if block (child block) and later
+      printing num outside the block, num is different for the child
+      process and parent process.
+
+ 
