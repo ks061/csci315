@@ -4,4 +4,12 @@
       printing num outside the block, num is different for the child
       process and parent process.
 
- 
+(2.a) pid: stack segment (because it is a local variable in main)
+      x: data segment (because it is a global/static variable)
+      y: stack segment (because it is a local variable in main)
+      i: data segment (because it is a global/static variable)
+      j: stack segment (because it is a local/variable in main)
+
+(2.b) There are separate stacks for the child process and parent process.
+      Therefore, there are two instances of num: one in the memory space
+      of the parent and one in the memory space of the child.

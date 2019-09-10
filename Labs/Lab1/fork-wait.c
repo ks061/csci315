@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 
 int main(int argc, char *argv[]) {
@@ -35,6 +36,8 @@ int main(int argc, char *argv[]) {
       sleep(1);
     }
     printf("child pid: %d\n", pid);
+    printf("getpid: %d\n", getpid());
+    printf("getppid: %d\n", getppid());
   } else {
     for (num=0; num < 20; num+=3) {
        printf("parent: %d\n", num); fflush(stdout);
