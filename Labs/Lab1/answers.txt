@@ -2,7 +2,8 @@
       of the child and one in that of the parent. Upon testing by
       changing num in a pid==0 if block (child block) and later
       printing num outside the block, num is different for the child
-      process and parent process.
+      process and parent process. There are separate stacks for the
+      child process and parent process.
 
 (2.a) pid: stack segment (because it is a local variable in main)
       x: data segment (because it is a global/static variable)
@@ -10,6 +11,3 @@
       i: data segment (because it is a global/static variable)
       j: stack segment (because it is a local/variable in main)
 
-(2.b) There are separate stacks for the child process and parent process.
-      Therefore, there are two instances of num: one in the memory space
-      of the parent and one in the memory space of the child.
