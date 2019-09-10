@@ -7,5 +7,6 @@
 
 3. Both Linux files and pipes need to first be opened before they can be
    read to or written from. After being read to or written from, they should
-   be closed. Using pipes is faster than using files because pipes use
-   memory whereas files use on-disk storage.
+   be closed. Pipes are bounded, whereas that may not necessarily be the case
+   for files. Pipes also open differently than files. Using pipes is faster 
+   than using files because pipes use memory whereas files use on-disk storage.
