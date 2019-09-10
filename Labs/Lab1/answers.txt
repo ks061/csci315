@@ -11,3 +11,23 @@
       i: data segment (because it is a global/static variable)
       j: stack segment (because it is a local/variable in main)
 
+(2.b) Yes, we can conclude that (1) the data segment and the stack
+      segment of a parent process are copied over to the child process.
+      The variable x is in the data segment, and the variable y is in the
+      stack segment. The child initially does see that x = 3.14 and that
+      y = 2.18, as copied over from the parent process memory space.
+      Regarding (2), the changes made to these variables by the child are
+      not seen by the parent because the parent process refers to a memory
+      space different from that of the child process. The parent process
+      keeps seeing x = 3.14 and y = 2.18.
+
+(2.d) Even though one process may close a file, another process can also
+      read from the file. In fork-file.c, we see that the parent process
+      can read from the file data.txt, even though it is waiting for the
+      child process to terminate (and close the file before it terminates).
+      The reading of data.txt by the child affects what the parent will
+      read because the file descriptor, which is shared by the child and
+      parent process, contains information to what part of the file was 
+      last read. When the parent process reads the file again, it skips
+      5 characters because the child process read the 5 preceding characters 
+      from data.txt.
