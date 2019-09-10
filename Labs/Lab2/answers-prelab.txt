@@ -1,0 +1,11 @@
+1. The dynamically-allocated data initialized by the parent process
+   is inhereited by the child process.
+
+2. The open files from the parent are also inherited from the child process.
+   Essentially, pipes are a kind of file. It follows, then, that the
+   pipe used by the parent can also be accessed by the child.
+
+3. Both Linux files and pipes need to first be opened before they can be
+   read to or written from. After being read to or written from, they should
+   be closed. Using pipes is faster than using files because pipes use
+   memory whereas files use on-disk storage.
