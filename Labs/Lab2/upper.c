@@ -85,18 +85,21 @@ int main(void) {
         close(child_to_parent[WRITE_END]);
 
         /* read from the pipe */
+        int write_index = 0;
         parent_char_written = msg[0];
         while(parent_char_written != 0) {
             Write(parent_to_child[WRITE_END], &parent_char_written, 1); 
-            parent_char_written++;
+            write_index++;
+            parent_char_written = msg[write_index];
         }
 
+        close(parent_to_child[WRITE_END]);
+        
         while(Read(child_to_parent[READ_END], &parent_char_read, 1) > 0) {
             printf("Character read by parent process: %c\n", parent_char_read);
         }
 
         /* close the unused ends of the pipes */
-        close(parent_to_child[WRITE_END]);
         close(child_to_parent[READ_END]);
 
    } else { /* child process */

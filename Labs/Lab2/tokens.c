@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,10 +56,10 @@ int Write(int fd, const void *buf, size_t count) {
 }
 
 int main(void) {
-    char parent_buffer_write[BUFFER_SIZE] = "\0";
+    char parent_buffer_read[BUFFER_SIZE] = "\0";
     char child_buffer_write[BUFFER_SIZE] = "\0";
     char child_buffer_read[BUFFER_SIZE] = "\0";
-    char parent_buffer_write = "This      is     a     test      of    the    alert     system";
+    char parent_buffer_write[] = "This      is     a     test      of    the    alert     system";
 
     int parent_to_child[2];
     int child_to_parent[2];
@@ -91,8 +92,8 @@ int main(void) {
         int str_length = strlen(parent_buffer_write);
 
         /* write 4 bytes to pipe and then remainder */
-        Write(parent_to_child[WRITE_END], &str_len, 4);
-        Write(parent_to_child[WRITE_END], parent_buffer_write, str_len+1);
+        Write(parent_to_child[WRITE_END], &str_length, 4);
+        Write(parent_to_child[WRITE_END], parent_buffer_write, str_length+1);
 
         /* wait for child to finish processing */
         wait(&child_status);
@@ -121,10 +122,10 @@ int main(void) {
         while ((is_data_coming_from_child = Read(parent_to_child[READ_END], &str_length, 4)) == 0);
 
         /* check for remainder of bytes */
-       while ((is_data_coming_from_child = Read(parent_to_child[READ_END], child_buffer,_read, BUFFER_SIZE)) == 0);
+       while ((is_data_coming_from_child = Read(parent_to_child[READ_END], child_buffer_read, BUFFER_SIZE)) == 0);
 
-        char word_read[];
-        word = strtok(child_buffer_read, " ");
+        char* word_read;
+        word_read = strtok(child_buffer_read, " ");
 
        while (word_read != NULL) {
            strcat(child_buffer_write, word_read);
