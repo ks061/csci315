@@ -8,6 +8,11 @@
 #define READ_END 0
 #define WRITE_END 1
 
+pid_t Fork(void);
+int Pipe(int pipefd[2]);
+int Read(int fd, void *buf, size_t count);
+int Write(int fd, const void *buf, size_t count);
+
 pid_t Fork(void) {
     int pid = fork();
     if (pid == -1) {
@@ -70,7 +75,7 @@ int main(void) {
 
     if (pid > 0) { /* parent process */
         /* close the unused end of the pipe */
-        Close(fd[READ_END]);
+        close(fd[READ_END]);
 
         /* write to the pipe one character at a time */
         char* char_ptr = write_msg;

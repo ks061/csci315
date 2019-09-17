@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 25
+#define BUFFER_SIZE 63
 #define READ_END 0
 #define WRITE_END 1
 
@@ -59,7 +59,7 @@ int main(void) {
     char parent_buffer_read[BUFFER_SIZE] = "\0";
     char child_buffer_write[BUFFER_SIZE] = "\0";
     char child_buffer_read[BUFFER_SIZE] = "\0";
-    char parent_buffer_write[] = "This      is     a     test      of    the    alert     system";
+    char parent_buffer_write[BUFFER_SIZE] = "This      is     a     test      of    the    alert     system";
 
     int parent_to_child[2];
     int child_to_parent[2];
