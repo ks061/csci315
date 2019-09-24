@@ -1,0 +1,57 @@
+Problem 1
+1. Undefined references: "pthread_create" and "pthread_join" in main and "pow" in SumExp
+   Unused variables: void* status
+
+2. -lm (for pow)
+
+3. -lpthread resolved issues regarding pthread_create and pthread_join being undefined. After
+   including that flag in the Makefile, the program compiled successfully.
+
+Problem 2
+1. There is a struct for thread arguments called thread_args, which stores
+   tid (thread id), a, b, x (double), and a result. Each time main creates
+   a thread, it assigns tid, a, b, x, and result values and then passes
+   a struct pointer, which is casted as a void pointer, serving as the
+   function argument for SumExp. Once the thread receives the struct pointer,
+   it will dereference the pointer into a struct and extract the values
+   stored in the variables within the struct to perform necessary computations.
+
+2. calloc() allocates multiple memory blocks of fixed size and returns a pointer 
+   to that memory. Also, calloc() initializes the memory to values of 0, whereas
+   malloc() does not initialize the memory; if one were to use malloc(), one would
+   need to use memset() afterwards to initialize the memory to 0. 
+   
+   Cited URL: https://stackoverflow.com/questions/1538420/difference-between-malloc-and-calloc
+
+3. Upon exit, a detached thread will deallocate all its resources upon exit; moreover,
+   other threads will not need to join it. The general rule of thumb regarding using
+   a detached thread or not using one appears to be that detached threads are preferred
+   when the return value or ID of the thread does not need to be saved. If the return
+   value is needed later in the program, then pthread_join() should be used to make
+   sure that the application (main) can access resources modified by the thread.
+   In this problem, main() cares about the result variable in the struct modified
+   by each thread; detach should not be used in this case because using detach will
+   cause zeros to be computed for the return values due to not waiting for the
+   completion of the individual threads. 
+
+   Cited URL: https://thispointer.com/posix-detached-vs-joinable-threads-pthread_join-pthread_detach-examples/
+
+4. The main thread uses calloc(), as discussed earlier, to allocate structs that are
+   modified by threads. The main thread uses pthread_join() so that individual threads
+   have finished computing their result value in the struct that was allocated for
+   them and then computes the final summation.
+
+5. The process stops after exit(-1) is called by a thread.
+
+6. The process was modified to execute ls in the same directory as the program;
+   also, the threads all terminated after this modification to the process.
+
+Problem 4
+1. Individual threads have access to the text buffer address used in ctime; one thread
+   may overwrite the buffer before another thread has had a chance to print the
+   termination time information stored in that buffer.
+
+2. Use ctime_r, where r represents thread-safe. The second argument points to a
+   character buffer. This way, the character buffer can be created locally in the
+   stack and then passed to ctime, where ctime will write the time information
+   into that buffer.

@@ -1,0 +1,15 @@
+1. No. Even though the threads were created in the order
+   Thread 1 (digit-printing), Thread 2 (letter-printing), and
+   Thread 3 (pound-character-printing), the print output shows
+   that, in this case, the order of execution is Thread 2 (output
+   of 'a'), Thread 3 (output of '#'), and then Thread 1 (output of
+   '0'). The threads' order of execution does not (necessarily)
+   match the order in which they were created.
+
+2. No. The order of execution initially was Thread 2, Thread 3,
+   and then Thread 1, as highlighted in my answer to question number 1.
+   However, the next series of characters printed to the standard output
+   reflected that the order of execution changed to Thread 2 (output of 
+   'b'), Thread 1 (output of '1'), and then Thread 3 (output of '#').
+   The threads do not always follow the same order of execution (in a 
+   predictable order).
