@@ -1,0 +1,14 @@
+Problem 1.1: I have completed this problem, and it works to specification.
+Problem 1.2: I have completed this problem, and it works to specification.
+Problem 1.3: I have completed this problem, and it works to specification.
+Problem 2.1: I have completed this problem, and it works to specification.
+Problem 2.2: I have completed this problem, and it works to specification.
+Problem 2.3: I have completed this problem, and it works to specification.
+Problem 2.4: I have completed this problem, and it works to specification.
+Problem 2.5: I have completed this problem, and it works to specification.
+Problem 2.6: I have completed this problem, and it works to specification.
+Problem 3.1: I have completed this problem, and it works to specification.
+Problem 3.2: I have completed this problem, and it works to specification.
+Problem 4.1: I have completed this problem, and it works to specification.
+Problem 4.2: I have completed this problem, and it works to specification.
+Problem 4.3: I have completed this problem, and it works to specification.
