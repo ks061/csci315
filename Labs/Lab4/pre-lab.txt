@@ -1,0 +1,32 @@
+Problem 1
+1. A socket is a node on a network that communicates to and from the network 
+   to which it is connected to and returns a descriptor. 
+
+Commonalities:
+- socket(2) and pipe(2) are intercommunication protocols
+- socket(2), pipe(2), and open(2) return a file descriptor int upon
+  successful creation of the respective communication medium.
+
+Differences:
+- pipe(2) and open(2) are used for communication within a machine.
+  socket(2), on the other hand, is used for communication amongst more
+  than one machines using IP addresses and the like.
+- socket(2) and pipe(2) are used for communication amongst processes, whereas
+  open(2) is used for reading/writing from files in memory. 
+
+Problem 2
+1. Programs address one another using the sockaddr struct containing the address family
+   and the 14 bytes of the protocol address.
+2. bind(2) helps "bind a name to a socket" by setting the socket address represented
+   by the file descriptor sockfd to the sock address held by the struct sockaddr*
+   named addr passed into the method. The server uses this to listen to incoming
+   requests from a specific port from a client.
+3. connect(2) establishes a connection between the file descriptor for the socket named
+   sockfd and the address specified by the struct sockaddr* named addr. This allows
+   clients using a socket to make a connection to a server.
+4. listen(2) listens to connections that are trying to be established to a socket.
+5. accept(2) dequeues a connection from a queue of incoming connections that are coming
+   into the listening socket. Then, it creates a new socket and returns a descriptor to
+   that socket. It essentially "[accepts] a connection on a socket."
+6. send(2) can be used for sending messages to sockets, and recv(2) can be used for
+   receiving messages from sockets.

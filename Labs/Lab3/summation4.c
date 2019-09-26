@@ -34,11 +34,26 @@ struct thread_args {
 	double result;
 };
 
+struct timeval* calc_time_diff(struct timeval* start_time, struct timeval* end_time) {
+	struct timeval* summed_time = (struct timeval*) malloc(sizeof(struct timeval));
+        if (end_time->tv_usec < start_time->tv_usec) {
+            end_time->tv_sec -= 1;
+            end_time->tv_usec += 1000000;
+        }
+        summed_time->tv_sec = end_time->tv_sec - start_time->tv_sec;
+        summed_time->tv_usec = end_time->tv_usec - start_time->tv_usec;
+        return summed_time;
+}
+
 extern int shared;
 
 // function that each thread will execute
 void *SumExp(void *args_ptr) {
-	int i;
+        struct timeval* start_time = (struct timeval*) malloc(sizeof(struct timeval));
+        struct timeval* end_time = (struct timeval*) malloc(sizeof(struct timeval));
+        gettimeofday(start_time, NULL);	
+
+        int i;
 	struct thread_args *myargs_ptr = (struct thread_args*) args_ptr;
 	myargs_ptr->result = 0;
 
@@ -63,6 +78,18 @@ void *SumExp(void *args_ptr) {
 			myargs_ptr->x,
 			myargs_ptr->result);
 
+        gettimeofday(end_time, NULL);
+
+        struct timeval* summed_time = calc_time_diff(start_time, end_time);
+        printf("Thread #%d took %d.%d seconds to execute\n", myargs_ptr->tid, (int)summed_time->tv_sec, (int)summed_time->tv_usec);
+        free(start_time);
+        free(summed_time);
+         
+        char buffer[100];
+        ctime_r(&(end_time->tv_sec), buffer);
+        printf("Thread #%d terminated at %s", myargs_ptr->tid, buffer);
+        free(end_time);
+
 	pthread_exit((void*) args_ptr);
 }
 
@@ -70,8 +97,8 @@ int shared;
 
 int main (int argc, char *argv[]) {
 
-        struct timeval *start_time = (struct timeval *) malloc(sizeof(struct timeval));
-        struct timeval *end_time = (struct timeval *) malloc(sizeof(struct timeval));
+        struct timeval* start_time = (struct timeval *) malloc(sizeof(struct timeval));
+        struct timeval* end_time = (struct timeval *) malloc(sizeof(struct timeval));
         gettimeofday(start_time, NULL);
 	pthread_attr_t attr;
 
@@ -141,18 +168,11 @@ int main (int argc, char *argv[]) {
 	printf("Total value computed = %lf\n", summation);
 	
         gettimeofday(end_time, NULL);
-        struct timeval* summed_time = (struct timeval*) malloc(sizeof(struct timeval));
-        if (end_time->tv_usec < start_time->tv_usec) {
-            end_time->tv_sec -= 1;
-            end_time->tv_usec += 1000000;
-        }
-        summed_time->tv_sec = end_time->tv_sec - start_time->tv_sec;
-        summed_time->tv_usec = end_time->tv_usec - start_time->tv_usec;
+        struct timeval* summed_time = calc_time_diff(start_time, end_time);
         printf("Program execution time: %d.%d seconds\n", (int) summed_time->tv_sec, (int) summed_time->tv_usec);
-        
         free(start_time);
         free(end_time);
-        free(summed_time);
+        free(summed_time);        
 
         pthread_exit(NULL);
 	printf("still here\n");
