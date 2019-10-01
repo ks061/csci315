@@ -1,0 +1,27 @@
+1. Instead of creating another process (a child process) with the execution
+   of fork() while the parent process is running, we executed two programs
+   (which are run by two separate processes) through two terminal windows
+   and used TCP sockets to have them communicate with one another (interprocess
+   communication).
+
+2. Socket functionality is provided by the kernel; it is available on the system
+   call level, as evident by socket's documentation in section 2 of the manual
+   pages. It would be ill-advisable to communicate confidential data at the 
+   user level, as users should not be able to tamper with the secure
+   interprocess communication offered by sockets.
+
+3. Pipes are easier to implement and, therefore, make more sense to use
+   when required for communication between two processes on the same machine.
+   TCP sockets, on the other hand, provide functionality for and will make
+   sense to use for communication between two processes on different machines.
+
+4. This function translates a user-inputted name of the host machine to 
+   the IP address of the host machine.
+
+5. getaddrinfo(3) might eventually replace gethostbyname(3).
+
+   getaddrinfo(3) have supports IPv6 and DNS lookups.
+
+   Source: https://stackoverflow.com/questions/52727565/client-in-c-use-gethostbyname-or-getaddrinfo
+
+   Source: http://blog.dornea.nu/2015/04/30/gethostbyname-vs-getaddrinfo/

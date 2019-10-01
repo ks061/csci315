@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "wrappers.h"
+
 #define BUFFER_SIZE 512 // length of message buffer    
 #define	QLEN 6   // length of request queue
 
@@ -64,7 +66,7 @@ main (int argc, char* argv[]) {
 	int port;		             // protocol port number		
 	socklen_t alen;	         // length of address			
 	char in_msg[BUFFER_SIZE];  // buffer for incoming message
-
+        char out_msg[BUFFER_SIZE]; // buffer for outgoing message
 	// prepare address data structure
 
 	// The memset call is ESSENTIAL!
@@ -101,37 +103,49 @@ main (int argc, char* argv[]) {
 		perror("ECHOD: socket creation failed");
 		exit(-1);
 	}
+        printf("Update: Creation of socket (number: %d) successful.\n", sd);
 
 	// assign IP/port number to socket where connections come in 
-
-	if (bind(sd, (struct sockaddr *)&sad, sizeof(sad)) < 0) {
-		perror("ECHOD: bind failed");
-		exit(-1);
-	}
+      
+        Bind(sd, (struct sockaddr*)&sad, sizeof(sad));
+        printf("Update: Bind successful.\n");
 
 	// set up socket to receive incomming connections 
-
-	if (listen(sd, QLEN) < 0) {
-		perror("ECHOD: listen failed");
-		exit(-1);
-	}
+        
+        Listen(sd, QLEN);
+        printf("Update: Listening on socket successful.\n");
 
 	// main server loop - accept and handle requests 
 
 	while (FOREVER) {
 		alen = sizeof(cad);
 
-		if ( (sd2 = accept(sd, (struct sockaddr *)&cad, &alen)) < 0) {
-			perror("ECHOD: accept failed\n");
-			exit(-1);
-		}
-
-		num_requests++;
+                sd2 = Accept(sd, (struct sockaddr*)&cad, &alen);
+		
+                num_requests++;
 
 		// receive the string sent by client
+                recv(sd2, in_msg, BUFFER_SIZE, 0);
+                printf("ECHOD: receive %s\n", in_msg);
+
+                // tokenize and cleanup string
+                char* in_msg_word;
+                in_msg_word = strtok(in_msg, " ");
+
+                while (in_msg_word != NULL) {
+                    strcat(out_msg, in_msg_word);
+                    strcat(out_msg, " ");
+                    in_msg_word = strtok(NULL, " ");
+                }
+                out_msg[strlen(out_msg)-1] = '\0';
 
 		// send the received string back to client
+                send(sd2, out_msg, BUFFER_SIZE, 0);
+                printf("ECHOD: send %s\n", out_msg);
 
+                memset(out_msg, 0, strlen(out_msg));                
+
+                // close socket
 		close(sd2);
-}
+        }
 }

@@ -52,17 +52,13 @@
 
 int
 main(int argc, char* argv[]) {
+	char* host;      // pointer to the host
+        char* port;      // pointer to port number
+        char  in_msg[BUFFER_SIZE]; // buffer for incoming message
 
-	struct	hostent	 *ptrh;	 // pointer to a host table entry	
-	struct	sockaddr_in sad; // structure to hold an IP address	
-
-	int	sd;		                 // socket descriptor			
-	int	port;		               // protocol port number		
-	char *host;                // pointer to host name		
-	char  in_msg[BUFFER_SIZE]; // buffer for incoming message
-
-	memset((char *)&sad,0,sizeof(sad)); // zero out sockaddr structure	
-	sad.sin_family = AF_INET;	          // set family to Internet	
+        struct addrinfo** res = NULL;
+        
+        int sd; // socket descriptor 
 
 	// verify usage
 
@@ -72,27 +68,27 @@ main(int argc, char* argv[]) {
 	}
 
 	host = argv[1];		
-	port = atoi(argv[2]);	
+	port = argv[2];
 
-	if (port > 0)	
-		// test for legal value		
-		sad.sin_port = htons((u_short)port);
-	else {				
+        /*
+        memset((char*)hints,0,sizeof(*hints));
+        hints->ai_family = AF_INET;
+        hints->ai_socktype = SOCK_STREAM;
+        hints->ai_protocol = 0;
+        hints->ai_canonname = argv[1];
+        */
+
+	if (port > 0) {
+		printf("debug1");
+                // test for legal value		
+		getaddrinfo(host, port, NULL, res);
+                printf("debug2");
+	} else {				
 		// print error message and exit	
 		printf("ECHOREQ: bad port number %s\n", argv[2]);
 		exit(-1);
 	}
 
-	// convert host name to equivalent IP address and copy to sad 
-
-	ptrh = gethostbyname(host);
-
-	if ( ((char *)ptrh) == NULL ) {
-		printf("ECHOREQ: invalid host: %s\n", host);
-		exit(-1);
-	}
-
-	memcpy(&sad.sin_addr, ptrh->h_addr, ptrh->h_length);
 
 	// create socket 
 
@@ -103,9 +99,12 @@ main(int argc, char* argv[]) {
 	}
         printf("Update: Creation of socket (number: %d) successful.\n", sd);
 
-	// connect the socket to the specified server 
+	struct sockaddr_in* sad_in = (struct sockaddr_in*)((*res)->ai_addr);
+        sad_in->sin_port = atoi(port);
+
+        // connect the socket to the specified server 
         
-        Connect(sd, (struct sockaddr*)&sad, sizeof(sad));  
+        Connect(sd, (*res)->ai_addr, (*res)->ai_addrlen);  
         printf("Update: Connection on socket successful.\n");
 
         char* buf_to_server = argv[3];
