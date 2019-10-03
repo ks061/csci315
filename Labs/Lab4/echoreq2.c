@@ -56,7 +56,8 @@ main(int argc, char* argv[]) {
         char* port;      // pointer to port number
         char  in_msg[BUFFER_SIZE]; // buffer for incoming message
 
-        struct addrinfo** res = NULL;
+        struct addrinfo hints;
+        struct addrinfo* res;
         
         int sd; // socket descriptor 
 
@@ -70,19 +71,13 @@ main(int argc, char* argv[]) {
 	host = argv[1];		
 	port = argv[2];
 
-        /*
-        memset((char*)hints,0,sizeof(*hints));
-        hints->ai_family = AF_INET;
-        hints->ai_socktype = SOCK_STREAM;
-        hints->ai_protocol = 0;
-        hints->ai_canonname = argv[1];
-        */
+        memset(&hints, 0, sizeof(hints));
+        hints.ai_family = AF_INET;
+        hints.ai_socktype = SOCK_STREAM;
 
 	if (port > 0) {
-		printf("debug1");
                 // test for legal value		
-		getaddrinfo(host, port, NULL, res);
-                printf("debug2");
+		getaddrinfo(host, port, &hints, &res);
 	} else {				
 		// print error message and exit	
 		printf("ECHOREQ: bad port number %s\n", argv[2]);
@@ -91,20 +86,19 @@ main(int argc, char* argv[]) {
 
 
 	// create socket 
-
-	sd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	if (sd < 0) {
 		printf("ECHOREQ: socket creation failed\n");
 		exit(-1);
 	}
         printf("Update: Creation of socket (number: %d) successful.\n", sd);
 
-	struct sockaddr_in* sad_in = (struct sockaddr_in*)((*res)->ai_addr);
-        sad_in->sin_port = atoi(port);
+	// struct sockaddr_in* sad_in = (struct sockaddr_in*)(res->ai_addr);
+        // sad_in->sin_port = atoi(port);
 
         // connect the socket to the specified server 
         
-        Connect(sd, (*res)->ai_addr, (*res)->ai_addrlen);  
+        Connect(sd, res->ai_addr, res->ai_addrlen);  
         printf("Update: Connection on socket successful.\n");
 
         char* buf_to_server = argv[3];

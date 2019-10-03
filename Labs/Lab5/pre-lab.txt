@@ -1,0 +1,34 @@
+1. Mutex is like a car key with the assumption that a car only has one key. Only one
+   person can use the key to drive the car at a time. Others have to wait their turn to
+   drive the car. When a person is finished driving, they give the car key to the next
+   person waiting in line.
+
+   A semaphore, on the other hand, represents how many keys are available for use. In
+   our example, the semaphore holds the number of keys available to be used to drive
+   cars. Suppose there are 5 keys. When someone wants to a drive a car, they take a key,
+   drive the car with the key, and the number of keys available decreases by 1. If someone
+   returns a key, the number of keys increases by 1. If there are no more keys, the
+   semaphore that represents the number of available keys holds a value of 0.
+
+2. pthread_mutex_init initializes a mutex based on attr. attr represents
+   attributes that the mutex will be initialized with.
+
+   pthread_mutex_lock locks the mutex. If the mutex happens to be already
+   locked, then the thread will wait to lock the mutex until the mutex is 
+   unlocked via blocking.
+
+   pthread_mutex_unlock unlocks the mutex. The attributes of the mutex
+   will determine the way in which it is released.
+
+   sem_init(3) initializes an unnamed semaphore. It is initialized at
+   the memory location pointed to by sem.
+
+   sem_wait(3) locks a semaphore pointed to by sem. It does so by decrementing
+   the semaphore (until the value of the semaphore is 0). If the value of the
+   semaphore is already 0, the call blocks until the value of the semaphore
+   is greater than 0. 
+   
+   sem_post(3) unlocks a semaphore pointed to by sem. It does so by incrementing
+   the value of the semaphore. Once the value of a semaphore is greater than
+   0, a blocked sem_wait call will be activated and will continue to lock the
+   semaphore.
