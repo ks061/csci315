@@ -13,7 +13,10 @@ OBJS =
 vpath %.h $(INCLUDE_DIR)
 vpath %.c $(SRC_DIR)
 
-all: $(EXECS)
+all: makedirs $(EXECS)
+
+makedirs:
+	mkdir -p $(BIN_DIR) $(OBJ_DIR)
 
 $(OBJ_DIR)/circular-list.o: $(SRC_DIR)/circular-list.c $(INCLUDE_DIR)/circular-list.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -25,4 +28,4 @@ prodcons: $(SRC_DIR)/prodcons.c $(OBJ_DIR)/circular-list.o
 	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
 
 clean:
-	/bin/rm -rf $(EXECS) $(OBJS)
+	/bin/rm -rf $(OBJ_DIR) $(BIN_DIR)
