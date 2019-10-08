@@ -19,9 +19,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/circular-list.h" 
+#include "circular-list.h" 
 
 int circular_list_create(struct circular_list *l, int size) {
+  sem_init(&(l->empty), 0, size);
+  sem_init(&(l->full), 0, 0);
+  pthread_mutex_init(&(l->mutex), NULL);
+
   l->buffer = calloc(size, sizeof(item));
   l->start = -1;
   l->end = -1;
@@ -31,29 +35,45 @@ int circular_list_create(struct circular_list *l, int size) {
 }
 
 int circular_list_insert(struct circular_list *l, item i) {
+  sem_wait(&(l->empty));
+  pthread_mutex_lock(&(l->mutex));
+
   if (l->elems < l->size) {
       l->start++;
       if (l->start == l->size) l->start = 0;
       l->buffer[l->start] = i;
       l->elems++;
-  } else { 
+  } 
+  // no longer needed due to blocking until there is at least one empty spot
+  else { 
       printf("Circular list is full; could not insert %f into list.\n", i);
       return -1;
   }
+  
+  pthread_mutex_unlock(&(l->mutex));  
+  sem_post(&(l->full));
 
   return 0;
 }
 
 int circular_list_remove(struct circular_list *l, item *i) {
+    sem_wait(&(l->full));
+    pthread_mutex_lock(&(l->mutex));    
+
     if (l->elems > 0) {
         l->end++;
         if (l->end == l->size) l->end = 0;
         *i = l->buffer[l->end];
         l->elems--; 
-    } else {
+    } 
+    // no longer needed due to blocking until there is at least one full spot
+    else {
         printf("Circular list is full; could not remove item from list.\n");
         return -1;
     } 
-  
+
+    pthread_mutex_unlock(&(l->mutex));
+    sem_post(&(l->empty));
+    
   return 0;
 }

@@ -17,6 +17,9 @@
  * Author: L. Felipe Perrone (perrone@bucknell.edu)
  */
 
+#include <semaphore.h>
+#include <pthread.h>
+
 #ifndef _CIRCULAR_LIST_H_
 #define _CIRCULAR_LIST_H_
 
@@ -31,6 +34,10 @@ struct circular_list {
   int elems; /// number of elements currently held in buffer
   int size; /// capacity of the buffer 
   item *buffer; /// array of buffer items
+
+  sem_t empty; // semaphore indicating number of empty spots in buffer
+  sem_t full; // semaphore indicating number of full spots in buffer
+  pthread_mutex_t mutex; // lock to gain access to buffer
 }; 
 
 /**
