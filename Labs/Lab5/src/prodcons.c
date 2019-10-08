@@ -51,7 +51,7 @@ struct circular_list mylist;
 
 void *producer (void *param) {
   item i;
-  unsigned int seed = 1234;
+  unsigned int seed = * (unsigned int *) param;
  
   // init mutex
   while (true) {
@@ -71,7 +71,7 @@ void *producer (void *param) {
 
 void *consumer (void *param) {
   item i;
-  unsigned int seed = 999;
+  unsigned int seed = * (unsigned int *) param;
 
   while (true) {
     // sleep for random period of time
