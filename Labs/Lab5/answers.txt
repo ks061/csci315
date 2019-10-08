@@ -1,0 +1,7 @@
+3. 
+
+rand(3) is not thread-safe because the seed is stored in one memory location
+that is referred to by all calls (made by different threads) to rand(3). On the
+other hand, rand_r(3) is thread-safe because one passes in a pointer to
+a seed that specifies a particular spot to store the seed for each call
+(made by different threads).
