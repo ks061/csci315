@@ -1,7 +1,8 @@
 1. The dynamically-allocated data initialized by the parent process
-   is inhereited by the child process.
+   is inherited by the child process. The heap is shared between the
+   child and parent processes.
 
-2. The open files from the parent are also inherited from the child process.
+2. The open files from the parent are also inherited by the child process.
    Essentially, pipes are a kind of file. It follows, then, that the
    pipe used by the parent can also be accessed by the child.
 
