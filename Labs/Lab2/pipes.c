@@ -55,9 +55,11 @@ int Write(int fd, const void *buf, size_t count) {
 
 int main(void) {
     char write_msg[BUFFER_SIZE] = "Greetings";
-    char read_msg[BUFFER_SIZE];
     int fd[2];
     pid_t pid;
+
+    char read_char;
+    char write_char;
 
     /* create the pipe  */
     if (Pipe(fd) == -1) {
@@ -77,11 +79,14 @@ int main(void) {
         /* close the unused end of the pipe */
         close(fd[READ_END]);
 
+        int write_shift = 0;
+        write_char = write_msg[0];        
+
         /* write to the pipe one character at a time */
-        char* char_ptr = write_msg;
-        while (*char_ptr != '\0') {
-            Write(fd[WRITE_END], char_ptr, sizeof(char));
-            char_ptr++; 
+        while (write_char != 0) {
+            Write(fd[WRITE_END], &write_char, 1);
+            write_shift++;
+            write_char = write_msg[write_shift]; 
         }
 
         /* close the write end of the pipe */
@@ -91,12 +96,8 @@ int main(void) {
         close(fd[WRITE_END]);
 
         /* read from the pipe */
-        char* char_ptr = read_msg;
-        printf("read ");
-        while(*char_ptr != EOF) {
-            Read(fd[READ_END], char_ptr, sizeof(char)); 
-            printf("%c", *char_ptr);
-            char_ptr++;
+        while(Read(fd[READ_END], &read_char, 1) > 0) {
+            printf("read: %c\n", read_char);
         }
 
         /* close the read end of the pipe */

@@ -1,0 +1,70 @@
+TA - Mouaz Alhindi
+
+# Prelab
+
+Problem 1 (10 points)
+credit: 10 points
+feedback - it works
+
+Problem 2 (10 points)
+credit: 10 points 
+feedback - ok
+
+Problem 3 (10 points)
+credit: 10 points
+feedback - it works
+
+# Lab
+
+Problem 0 (5 points)
+credit: 5 points
+feedback - ok
+
+Problem 1 (20 points)
+1.a (5 points)
+credit: 5 points
+feedback - it works
+
+1.b (5 points)
+credit: 5 points
+feedback - I would add that it depends on the scope of the var as well
+
+1.c (10 points)
+credit: 10 points
+feedback - it works
+
+Problem 2 (25 points)
+2.a (4 points)
+credit: 4 points
+feedback - correct
+
+2.b (5 points)
+credit: 5 points
+feedback - ok
+
+2.c (6 points)
+credit: 6 points
+feedback - it works
+
+2.d (6 points)
+credit: 6 points
+feedback - ok
+
+2.e (4 points)
+credit: 4
+feedback - ok
+
+Problem 3 (20 points)
+3.1 (10 points)
+credit: 10 points
+feedback -  it works
+
+3.2 (10 points)
+credit: 10 points
+feedback - ok
+
+
+ 
+
+
+
