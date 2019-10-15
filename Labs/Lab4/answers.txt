@@ -1,3 +1,4 @@
+Problem 3
 1. Instead of creating another process (a child process) with the execution
    of fork() while the parent process is running, we executed two programs
    (which are run by two separate processes) through two terminal windows

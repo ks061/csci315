@@ -29,4 +29,7 @@ Problem 2
    into the listening socket. Then, it creates a new socket and returns a descriptor to
    that socket. It essentially "[accepts] a connection on a socket."
 6. send(2) can be used for sending messages to sockets, and recv(2) can be used for
-   receiving messages from sockets.
+   receiving messages from sockets. send(2) requires passing in a sock file descriptor,
+   a buffer to read from, the length of the message to be sent, and any additional flags.
+   recv(2) requires passing in a sock file descriptor, a buffer to receive a message to,
+   the length of the message to be received, and any additional flags.
