@@ -1,0 +1,11 @@
+TA - Mouaz Alhindi
+
+# Lab
+
+Problem 1 (40)
+credit: 40
+feedback - good to go
+
+Problem 2 (30)
+credit: 30
+feedback - all functions are there
