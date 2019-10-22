@@ -1,0 +1,16 @@
+1.1) All threads are taking turns using/releasing the chopsticks. After about a few minutes,
+     the program runs into deadlock.
+
+1.2) Deadlock has a possibility of occuring due to the following conditions:
+     - Mutual Exclusion: One chopstick cannot be picked up by two philosophers
+                         due to the atomic nature of locking/unlocking mutexes.
+     - Hold and Wait: The philosopher can hold, for example, the chopstick to its
+                      left while waiting for the chopstick to its right to be available.
+     - No preemption: A philosopher cannot be forced to release their chopstick, such as
+                      their left chopstick as mentioned in the hold and wait example above,
+                      until they choose to (get access to the right chopstick, enter
+                      their critical section, and then release both chopsticks).
+     - Circular wait: This is possible if each philosopher in a circle waits on the
+                      chopstick to their respective right.
+
+
