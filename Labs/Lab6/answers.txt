@@ -13,4 +13,7 @@
      - Circular wait: This is possible if each philosopher in a circle waits on the
                       chopstick to their respective right.
 
+2.1) Deadlock can happen if each of the philosophers picked up their left chopstick
+     and wait on their right chopstick.
 
+3.1) Since these solutions eliminate circular weight, deadlock is also eliminated.
