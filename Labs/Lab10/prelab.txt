@@ -1,0 +1,39 @@
+(2.1) I see characters from an inline comment on the right side of the 
+      hexdump output. On the left, I see the hex values for
+      each character, where every character is represented by
+      two consecutive hex digits. For example, "20" represents
+      a space in ASCII. After the parenthesis after digits, 
+      I see a new line, NULL (meaning that there is nothing in that
+      new line), etc.
+
+(2.2) I see characters representing machine instructions and Unix paths
+      on the right side of the hexdump output. On the left, I see the hex values for
+      each character, where every character is represented by two
+      consecutive hex digits. For example, "2f" represents / in
+      ASCII. 
+
+(2.3) (2.1) involves reading a c file, which is meant to be read and written
+      by human programmers. (2.2) involves reading the hexdump executable
+      file, which contains machine instructions rather than human readable
+      text (it is, rather, machine readable). The output for (2.2) does
+      contain a human-readable text, which is the path on the Unix machine
+      where a particular library resides.
+
+(2.4) It interprets and outputs information regarding the type of file
+      that a file is. /usr/bin/file is an LSB (little-endian)
+      executable file. ~cs315/Labs/Lab10/work is a PDF document.
+      ~cs315/Labs/Lab10/beauty is a JPEG image. hexdump.o is an
+      LSB relocatable, which is little-endian and is an object
+      file desgiend to run on Intel 80x86 microprocessors. hexdump.h
+      is a C language-related file that is written with ASCII characters.
+
+      It runs filesystem tests, magic tests, and language tests; the result of
+      the first test to return successfully (in that order) is returned by
+      file. The filesystem test examines whether the file matches any file types
+      native to the system. The magic test examines a number stored at the
+      beginning of the file being examined, which serves as an identifier
+      for a particular file type. Finally, the language test
+      interprets whether the file matches any known character sets; if it does,
+      the file is characterized as a text file.
+
+      Source: https://linux.die.net/man/1/file
