@@ -6,8 +6,8 @@
       I see a new line, NULL (meaning that there is nothing in that
       new line), etc.
 
-(2.2) I see characters from a header comment on the right side of the
-      hexdump output. On the left, I see the hex values for
+(2.2) I see characters representing machine instructions and Unix paths
+      on the right side of the hexdump output. On the left, I see the hex values for
       each character, where every character is represented by two
       consecutive hex digits. For example, "2f" represents / in
       ASCII. 
