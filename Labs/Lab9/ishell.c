@@ -41,8 +41,8 @@ int main(int argc, char *argv[]) {
 		} else {
 			Wait(&status);
 			termination_status = WEXITSTATUS(status);
-			if (status == 0) printf("[ishell: program terminated successfully]\n");
-			else printf("[ishell: program terminated abnormally][\"%d\"]\n", termination_status);
+			if (termination_status > 0) printf("[ishell: program terminated abnormally][\"%d\"]\n", termination_status);
+			else printf("[ishell: program terminated successfully]\n");
 		}
 	}
 	return 0;
