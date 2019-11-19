@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 
 	int pid;
 	int status;
+	int termination_status;
 	while (1) {
 		printf("ishell> ");
 
@@ -39,6 +40,9 @@ int main(int argc, char *argv[]) {
 			Execvp(cmd_args[0], cmd_args);		
 		} else {
 			Wait(&status);
+			termination_status = WEXITSTATUS(status);
+			if (status == 0) printf("[ishell: program terminated successfully]\n");
+			else printf("[ishell: program terminated abnormally][\"%d\"]\n", termination_status);
 		}
 	}
 	return 0;
