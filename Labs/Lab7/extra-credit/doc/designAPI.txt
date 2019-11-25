@@ -1,0 +1,128 @@
+Please note that notes about the design of allocator.c are below in
+the allocator.c section. I have provided descriptions of the
+dnode.c and dlist.c files as they relate to the project, as I think that
+it provides useful context for understanding the implementation of
+allocator.c
+
+*******************************************
+* dnode.c: Representing a chunk of memory *
+*******************************************
+
+Each dnode represents a chunk of memory. Since dnode objects are stored
+in a doubly-linked list called dlist, which is discussed below, each dnode
+holds a pointer to the dnode that precedes it in the list in which it is in
+and to one that succeeds it in that list. It also holds a pointer to the
+start of the chunk of memory being represented and a size integer variable
+that represents how large the chunk of memory extends beyond that
+starting pointer.
+
+***********************************************************
+* dlist.c: Representing a list of free or allocated nodes *
+***********************************************************
+
+In the context of this assignment, a dlist either represents a collection
+of free nodes or allocated nodes, which is made clear by the name of the list,
+namely free_list and allocated_list. dlists are doubly-linked lists; this
+data structure was chosen to allow for traversal in both directions through
+the list.
+
+Nodes can be added/removed to/from the front or back of the list.
+Nodes can also be added within the list such that the starting pointer in
+each node is strictly less than the starting pointer of nodes that follow
+it in the list. Nodes can be searched and accordingly removed from a list
+by their starting pointer.
+
+Moreover, a dlist has an iterator that can traverse (and return
+the nodes it traverses) the list either forwards or backwards.
+
+******************************
+* allocator.c: The Allocator *
+******************************
+
+The allocator has an initializing function with the function signature
+int allocator_init(size_t). This initializing function calls malloc to
+receive a pointer to a chunk of unallocated memory, creates a node
+representing this chunk of memory, and stores it in the list holding
+free chunks of memory, namely free_list. 
+
+An enum called ALLOC_ALGO was created in allocator.h to represent
+(with words to easier code readability) the type of allocation algorithm
+that the allocate function in allocate.c will use. The enum values
+FIRST_FIT, BEST_FIT, and WORST_FIT correspond to the memory allocation
+algorithms first fit, best fit, and worst fit. The global variable
+alloc_algo (of type ALLOC_ALGO) actually STORES the type of allocation
+algorithm that the allocate function in allocate.c will use, namely
+type ALLOC_ALGO. The enum type declaration and global variable are
+declared in allocator.h, as they will be included by both allocator.c and
+memory-test.c; the allocate method in allocator.c will read alloc_algo to
+interpret which memory allocation policy to use, and the memory-test.c will
+specify alloc_algo when switching its testing of the three memory allocation
+policies within its main function.
+
+The void* allocator(size_t) function returns NULL if the allocator
+initializing function has not yet been called, the memory allocation
+requested in the function call has a size of 0, or the list containing
+free chunks of memory, namely free_list, is empty. Otherwise, it either
+identifies that alloc_algo specifies a valid memory allocation policy, after
+which it will call static void* allocate_first_fit(size_t), 
+static void* allocate_best_fit(size_t), or static void*
+allocate_worst_fit(size_t), or it will print an error message specifying
+to check the alloc_algo variable in allocator.h. It should be noted
+that the three allocation policy helper methods primarily choose part of a
+memory chunk represented by free_list to be allocated and outsource the
+actual allocation to static void* allocate_ptr(size_t, struct dnode*).
+
+static void* allocate_first_fit(size_t) iterates through the list of free
+memory chunks to find the first chunk of memory that is at least as large
+as the chunk of memory requested for allocation. Once one is found,
+static void* allocate_ptr(size_t, struct dnode*) adjusts the identified node
+and returns a pointer to the start of the allocated memory, which is returned
+by this function. If no such node exists, NULL is returned.
+
+static void* allocate_best_fit(size_t) and static void*
+allocate_worst_fit(size_t) outsource identifying either the best or worst
+fitting chunk of memory that satisfies the allocation request made to
+static void* allocate_extreme_fit(size_t) due to significant similarties
+in their respective algorithms. 
+
+static void* allocate_extreme_fit(size_t) traverse through the free list
+until it has found either the best or worst fitting node to satisfy
+the allocation request; the allocation policy adopted is determined by
+reading the alloc_algo global variable, which should either be
+BEST_FIT or WORST_FIT within this method. Again, static void*
+allocate_ptr(size_t, struct dnode*) adjusts the identified node and returns
+a pointer to the start of the allocated memory, which is returned by
+this function. Again, if no such node exists, NULL is returned.
+
+static void* allocate_ptr_adjust(size_t, struct dnode*) decrements the
+pointer of the node by the amount of memory being allocated and reduces
+the size of the node by the amount of memory being allocated. If a free
+node has been fully allocated, it is removed the free list. Also,
+the allocated node is added to the allocated_list; finally, the starting
+pointer of the allocated memory chunk is returned.
+
+int deallocate(void* ptr) returns -1 if the inputted starting memory
+pointer is NULL or if no node exists in the list of allocated memory
+chunks with that starting pointer. If such a node exists, it is
+deleted from the allocated list and added (in sorted order according
+to its starting memory pointer as described in the dlist.c section
+above) to the free list. 0 is returned on success.
+
+void print_mem_lists() uses the helper methods static void
+print_free_list() to print each node representing a free chunk of 
+memory in free_list and static void print_allocated_list() to print
+each node representing an allocated chunk of memory in allocated_list.
+It should be noted that the print out of each node is an index range with
+a starting index and ending index. Remember that each node represents a chunk
+of memory; as such, there is a starting memory address associated with the
+first bit that is included in this chunk of memory and an ending memory address
+associated with the last bit that is included in this chunk of memory.
+The starting index is the difference between the starting memory address
+of this chunk and the starting memory address of the memory space assigned
+to the allocator. Similarly, the ending index is the difference between
+the ending memory address of this chunk and the ending memory address of
+this chunk and the starting memory address of the memory space assigned
+to the allocator. Memory addresses are printed out as integer indices
+rather than absolute hexadecimal memory address because they are easier
+to read and visualize.
+
