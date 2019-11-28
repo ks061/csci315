@@ -1,0 +1,124 @@
+*************
+* Problem 1 *
+*************
+
+1.1) External fragmentation is possible with a custom
+     memory allocator like mine. Additionally,
+     as seen in memory-test.c in Lab 7,
+     there is external fragmentation when there are chunks of free
+     memory between chunks of allocated memory. Technically, a
+     program that requests a chunk of memory may not end up using all of it, 
+     causing internal fragmentation. However, under the assumption
+     that a program does use all of the memory is requests, the custom
+     memory allocation only exhibits external fragmentation.
+
+1.2) Execution time is one performance metric that can be used to
+     determine how well the memory allocator is designed; a lower
+     execution time, of course, relates to a better designed
+     memory allocator. This could be done by storing the start time
+     when the memory allocation/deallocation request was made,
+     storing the end time when the memory allocation/deallocation request
+     was completed, and print the execution time, which is the difference
+     between the end time and start time of the program.
+
+     Another metric that could be used to measure the cost of the memory
+     allocator is the number of processor instructions executed during
+     a memory allocation/deallocation. This could be estimated by looking
+     at the object file allocator.o, which would contain processor instructions
+     based on the C code instructions written in allocator.c. Of course, 
+     less processor instructions relate to a better designed memory
+     allocator.
+
+1.3) double average_frag()
+     // pseudocode
+     int numBlobs = 0;
+     int totalSize = 0;
+     struct dnode *iter_node = head of memory chunk list
+     while (iter_node != NULL) {
+         numBlobs += 1;
+         totalSize += iter_node->size;
+         iter_node = iter_node->next;
+     } 
+     return (double) totalSize / numBlobs;
+
+totalSize is essentially the total number of bytes allocated to the custom
+memory allocator; there is no need to sum up the sizes of all of the nodes
+in the memory allocator. 
+
+Also, numBlobs can be kept as a global variable within the allocator that
+is incremented with each allocation.
+
+2.1) Programs often perform a series of allocations before performing
+deallocations; hence, this algorithm should be modified as such rather
+than performing a deallocation after each allocation. When there are
+a high number of allocation requests, smaller allocation requests are made
+to store smaller parts of programs (until only one byte of a program can
+be stored in the memory allocator at a time).
+
+unsigned int seed = *((unsigned int *)argv[2]);
+srand(seed);
+int num_requests = atoi(argv[3]); 
+void *p[num_requests];
+
+int r = 0;
+int s = 0;
+
+while (r < num_requests)
+	s = (random number between 100 and 1000);
+	p[r] allocate(atoi[1], s);
+	r++;
+
+while (r < num_requests)
+	if (p[r] != NULL) deallocate(p[r]);
+	r++;
+
+print("Average fragmentation [average_frag()]");
+
+3.1) frag_eval_exp.c runs 1000 trials for the
+first-fit, best-fit, worst-fit memory allocation policies
+and gathers the associated average fragmentation data
+for these trials.
+
+R = 1000 // # trials
+num_requests = 100 // in each trial, # of allocations/deallocations made
+1-alpha = 0.95 // confidence interval
+total size of the allocator = 10240 // 10K bytes of memory in allocator
+
+Results:
+                            FIRST FIT		BEST FIT	WORST FIT
+Point estimate              530.229352          531.746993      529.251812
+Standard deviation          56.3654097          58.0231900      59.0453104
+Confidence value            0.11179857          0.11508672      0.11711405
+Confidence interval        (530.117554,        (531.631906,    (529.134698,
+                            530.341151)         531.862079)     529.368926)
+
+See exp-results.pdf for the average fragmentation data for all 1000 trials
+conducted across the three memory allocation policies.
+
+3.2) There are no significant differences amongst the three memory allocation
+policies as observed specifically from the average fragmentation data
+of the three memory allocation policies within this experiment (see
+exp-results.pdf for experiment details or answer to 3.1). The first fit
+allocation had the lowest variation in average fragmentation (lowest
+standard deviation), whereas the worst fit allocation had the lowest
+average fragmentation yet largest confidence interval.
+
+Even though the results are not too significant, one might speculate that
+worst fit may be better because the lower average fragmentation data
+(and constant memory allocator size of 10K bytes) indicates that the
+number of allocations made in the worst fit case were higher, i.e. more
+memory allocation requests could be carried out; a memory allocation policy
+being able to accomodate more memory allocation requests appears to be a
+positive outcome. This could be explained by how placing memory allocations
+in the largest hole possible will also leave a large hole, increasing
+the probability that a future memory allocation request can be satisfied
+in the remaining large hole space that is leftover. Best fit, on the other
+hand, may be leaving behind relatively small holes after each memory
+allocation request, tightening the range of memory allocation requests
+(in terms of size) that can fit into that hole. 
+
+Even though worst fit may speculatively be an optimal memory allocation
+policy according to this experiment, a better simulation/measuring
+other variables related to memory allocator performance may be needed
+to determine which memory allocation policy is optimal, that is, for a
+particular use case as defined by such an experiment.

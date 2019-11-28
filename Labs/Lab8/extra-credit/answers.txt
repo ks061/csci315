@@ -1,0 +1,42 @@
+1. Within the list, the starting memory address of the block will be stored
+   at each node. Insertions and removals should maintain the chronological
+   order of memory addresses. Doubly-linked lists are suitable for
+   custom memory allocators because they have the ability to traverse, which
+   would be needed by the various allocation policies discussed below.
+
+2. Lists/arrays could work as well.
+
+3. External fragmentation is when even though there is enough free memory to
+   process a request, there is not enough contiguous memory to run the process.
+   The available memory is essentially split up by many pockets of allocated
+   memory, leaving small pockets of contiguous available memory. This could
+   occur if there is a contiguous segment of available memory between every
+   two allocated segments of memory; for all we know, a waiting process could
+   be run if these contiguous segments of available memory were all in one
+   contiguous segment, available for use by processes.
+
+4. Internal fragmentation is when there is a block of unused memory within
+   a segment of allocated memory. This would occur if the system allocated
+   fixed segments of 4,096 bytes of memory, but the process only used 1,024
+   bytes.
+
+5. The first-fit allocation policy allocates the first contiguous segment of
+   memory that it can find that meets the memory requirements of the process.
+   The advantage to this approach is stopping search (efficient search) once
+   a free hole that is large enough is found. A disadvantage is that it can
+   lead to external fragmentation, where free memory space is broken into
+   small, contiguous memory segments. 
+
+6. The best-fit allocation policy allocates the smallest contiguous segment
+   of memory that meets the requirements of the process. An advantage is
+   that it minimizes the size of the leftover segment of free memory. A
+   disadvantage is that the entire list of memory must be searched to
+   determine the smallest continguous segment of memory that meets the
+   process's memory requirements.
+
+7. The worst-fit allocation policy allocates the largest continguous segment
+   of memory. An advantage is that the size of the leftover unallocated
+   segment is maximized, addressing external fragmentation. A disadvantage
+   is that the entire list of memory must be searched to determine the largest
+   continguous segment of memory that meets the process's memory
+   requirements.
