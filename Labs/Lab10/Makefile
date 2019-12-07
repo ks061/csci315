@@ -21,8 +21,8 @@
 
 # compiler
 CC = gcc
-CFLAGS = -std=gnu99 -Wall -g
-EXECS = fdump file_stat read_dir traverse 
+CFLAGS = -std=gnu99 -Wall -g -pthread
+EXECS = fdump file_stat read_dir traverse sender receiver 
 INCLUDES = -I .
 OBJS = hexdump.o
 .PHONY: clean
@@ -52,6 +52,12 @@ traverse.o: traverse.c
 
 traverse: traverse.o
 	$(CC) $(CFLAGS) -o traverse traverse.o
+
+sender: sender.c
+	$(CC) $(CFLAGS) -o sender sender.c
+
+receiver: receiver.c
+	$(CC) $(CFLAGS) -o receiver receiver.c
 
 clean:
 	/bin/rm -f *~ *.o core $(EXECS) $(OBJS)
