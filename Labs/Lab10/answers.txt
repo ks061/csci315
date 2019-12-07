@@ -1,0 +1,7 @@
+(3.1) chmod u+rwx read_dir 
+(3.2) touch -m file
+(3.3) touch -a file
+(3.4) Knowing the maximum file length would be useful in an application that
+      stores the filename; to store a filename, particularly in a C program,
+      one needs to know how much space to allocate for the character buffer
+      in which the filename will be stored.
