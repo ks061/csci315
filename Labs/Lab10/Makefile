@@ -22,7 +22,7 @@
 # compiler
 CC = gcc
 CFLAGS = -std=gnu99 -Wall -g
-EXECS = fdump file_stat read_dir 
+EXECS = fdump file_stat read_dir traverse 
 INCLUDES = -I .
 OBJS = hexdump.o
 .PHONY: clean
@@ -46,6 +46,12 @@ read_dir.o: read_dir.c
 
 read_dir: read_dir.o
 	$(CC) $(CFLAGS) -o read_dir read_dir.o
+
+traverse.o: traverse.c
+	$(CC) -c $(CFLAGS) traverse.c
+
+traverse: traverse.o
+	$(CC) $(CFLAGS) -o traverse traverse.o
 
 clean:
 	/bin/rm -f *~ *.o core $(EXECS) $(OBJS)
